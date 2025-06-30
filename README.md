@@ -95,7 +95,7 @@ cp .env
 # Build and run all services
 docker compose up --build
 
-
+```
 ---
 
 ## Project Structure
