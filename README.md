@@ -74,6 +74,30 @@ The project dependencies are managed using Maven. Key dependencies include:
 
 ---
 
+## 🐳 Dockerized Setup
+
+### Prerequisites
+- Docker
+- Docker Compose
+
+### Steps to Run
+
+```bash
+# Clone the project
+git clone https://github.com/mdmazidulislam26/Online-Assessment-System-OAS.git
+
+# Go to project directory
+cd Online-Assessment-System-OAS/OAS
+
+# Setup environment variables
+cp .env
+
+# Build and run all services
+docker compose up --build
+
+
+---
+
 ## Project Structure
 
 ```
