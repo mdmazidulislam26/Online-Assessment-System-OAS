@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - oas-net
+
+  service-registry:
+     build: ./service-registry/service-registry
+     ports:
+       - "8761:8761"
+     networks:
+       - oas-net
+
+  questions:
+    build: ./questions/questions
+    ports:
+      - "2020:2020"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    depends_on:
+     - mysql
+     - service-registry
+    networks:
+     - oas-net
+
+  quiz:
+    build: ./quiz/quiz
+    ports:
+      - "3030:3030"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - mysql
+      - questions
+      - service-registry
+    networks:
+      - oas-net
+
+volumes:
+  mysql_data:
+
+networks:
+  oas-net: {}
